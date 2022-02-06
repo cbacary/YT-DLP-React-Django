@@ -1,31 +1,44 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Form from './Form';
-import UrlBody, { IUrl } from './Downloads'
+import Form from './Components/Form/Form';
+import DisplayVideos, { IVideo } from './Components/Video/Video'
 import axios from "axios";
-import Header from './Header';
+import Header from './Components/Header/Header';
 import { API_URL } from '.';
 
 
 class App extends Component {
 
   state = {
-    response_url: [],
+    videos: [],
+    bestVideo: {
+      res: "",
+      title: "",
+      url: ""
+    },
     processingStatus: false,
   };
 
   handleSubmit = (urlPassed: string) => {
-    this.setState({ response_url: [] });
+    this.setState({ videos: [] });
     axios.post(API_URL, { 'url': urlPassed }).then((res) => {
-      const keys = Object.keys(res.data);
-      for (let i = 0; i < keys.length; i++) {
-        this.setState({
-          response_url: [...this.state.response_url, { res: keys[i], url: res.data[keys[i]] }]
-        })
-      }
+      this.setState({ videos: res });
+      const highestResObj = res.data.reduce((prev: any, curr: any) => {
+        return parseInt(prev.res, 10) > parseInt(curr.res, 10) ? prev : curr;
+      });
+      this.setState({ bestVideo: highestResObj });
+      console.log(this.state.bestVideo);
+      // for (let i = 0; i < res.data.length; i++) {
+      // }
+      // const keys = Object.keys(res.data);
+      // console.log(res);
+      // for (let i = 0; i < keys.length; i++) {
+      //   this.setState({
+      //     response_url: [...this.state.response_url, { res: res.data.keys[i], url: res.data[keys[i]] }]
+      //   })
+      // }
     });
-    console.log(this.state);
   }
 
   render() {
@@ -33,31 +46,18 @@ class App extends Component {
 
       <div className="App">
         <Header />
-        <div className="form-container justify-content-center align-items-center">
+        <hr />
+        <div className="">
           <Form handleSubmit={this.handleSubmit} />
-          {(this.state.response_url.length !== 0) ? <UrlBody url={this.state.response_url} /> : <div></div>}
+          {(this.state.videos.length !== 0) ? <DisplayVideos vid={this.state.bestVideo} /> : <div></div>}
           <p className="mt-3">
             To save bandwidth on our side and increase download speeds for our users, the download is routed through Google's server.
           </p>
+          <p className="mt-2">
+            Once converted, click "Go to raw video," wait to be redirected, and right click the player and select "Save video as...".
+          </p>
         </div>
-
-        <div className="tutorial-helper">
-          <h3 className="">
-            Steps to download the video:
-          </h3>
-          <ol className="list-group-numbered container d-flex flex-column rounded">
-            <li className="list-group-item">
-              Paste the youtube video url in the form above and click submit.
-            </li>
-            <li className="list-group-item">
-              Click 'Choose Resolution' and choose your resolution, you will be redirected.
-            </li>
-            <li className="list-group-item">
-              Click the three dots on the bottom right of the video player and click 'Download'.
-            </li>
-          </ol>
-        </div>
-
+        <small id="urlHelp" className="form-text text-muted bottom">We're open source! Check out our <a href="https://github.com/CrabbleOrNiceTry/YT-DLP-React-Django" target="blank">Github</a></small>
       </div>
     )
   }
