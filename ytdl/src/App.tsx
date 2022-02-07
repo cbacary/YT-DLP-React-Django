@@ -6,7 +6,7 @@ import DisplayVideos, { IVideo } from './Components/Video/Video'
 import axios from "axios";
 import Header from './Components/Header/Header';
 import { API_URL } from '.';
-
+import VideoCard from './Components/Form/VideoCard';
 
 class App extends Component {
 
@@ -15,8 +15,10 @@ class App extends Component {
     bestVideo: {
       res: "",
       title: "",
-      url: ""
+      url: "",
+      thumbnail: "",
     },
+    // bestVideo: as any,
     processingStatus: false,
   };
 
@@ -29,15 +31,6 @@ class App extends Component {
       });
       this.setState({ bestVideo: highestResObj });
       console.log(this.state.bestVideo);
-      // for (let i = 0; i < res.data.length; i++) {
-      // }
-      // const keys = Object.keys(res.data);
-      // console.log(res);
-      // for (let i = 0; i < keys.length; i++) {
-      //   this.setState({
-      //     response_url: [...this.state.response_url, { res: res.data.keys[i], url: res.data[keys[i]] }]
-      //   })
-      // }
     });
   }
 
@@ -49,15 +42,16 @@ class App extends Component {
         <hr />
         <div className="">
           <Form handleSubmit={this.handleSubmit} />
-          {(this.state.videos.length !== 0) ? <DisplayVideos vid={this.state.bestVideo} /> : <div></div>}
+          {/* {(this.state.videos.length !== 0) ? <DisplayVideos vid={this.state.bestVideo} /> : <div></div>} */}
           <p className="mt-3">
             To save bandwidth on our side and increase download speeds for our users, the download is routed through Google's server.
           </p>
           <p className="mt-2">
-            Once converted, click "Go to raw video," wait to be redirected, and right click the player and select "Save video as...".
+            Once converted, click "Go to raw video," wait to be redirected, and right click the player and select "Save video as..." Or, click the ellipses and then click "Download."
           </p>
         </div>
         <small id="urlHelp" className="form-text text-muted bottom">We're open source! Check out our <a href="https://github.com/CrabbleOrNiceTry/YT-DLP-React-Django" target="blank">Github</a></small>
+        {(this.state.videos.length !== 0) ? <VideoCard url={this.state.bestVideo.url} img={this.state.bestVideo.thumbnail} title={this.state.bestVideo.title} /> : <div></div>}
       </div>
     )
   }
