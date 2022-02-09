@@ -18,7 +18,9 @@ from django.urls import path, re_path
 from ytdl import views
 # from django.conf.urls import url
 
+# re_path(r'^api/ytdl/get_url/$', views.get_url),
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^api/ytdl/get_url/$', views.get_url),
+    path('api/ytdl/get_url/', views.get_url),
 ]

@@ -1,0 +1,5 @@
+/* If hover over info-card increase size */
+.info-card:hover {
+    transform: scale(1.1);
+    transition: 100ms;
+}

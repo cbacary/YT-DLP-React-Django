@@ -7,8 +7,6 @@ from .models import YTDl
 from .serializers import *
 from .get_dl import get_ytdl_url
 
-# Create your views here.
-
 
 @api_view(['GET', 'POST'])
 def get_url(request):
