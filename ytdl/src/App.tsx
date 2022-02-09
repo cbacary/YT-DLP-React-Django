@@ -64,11 +64,11 @@ class App extends Component {
             To save bandwidth on our side and increase download speeds for our users, the download is routed through Google's server.
           </p>
           <p className="mt-2">
-            Once converted, click "Go to raw video," wait to be redirected, and right click the player and select "Save video as..." Or, click the ellipses and then click "Download."
+            Once converted, right click the player and select "Save video as..." Or, click the ellipses and then click "Download."
           </p>
         </div>
         <small id="urlHelp" className="form-text text-muted bottom">We're open source! Check out our <a href="https://github.com/CrabbleOrNiceTry/YT-DLP-React-Django" target="blank">Github</a></small>
-        {(this.state.videos.length !== 0) ? <VideoCard url={this.state.bestVideo.url} img={this.state.bestVideo.thumbnail} title={this.state.bestVideo.title} /> : <div></div>}
+        {(this.state.videos.length !== 0) ? <VideoCard url={this.state.bestVideo.url} /> : <div></div>}
         <div className="container mb-2 mt-3 justify-content-center">
           <div className="row justify-content-center">
             <div className="col-md-auto">
