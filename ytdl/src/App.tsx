@@ -20,21 +20,36 @@ class App extends Component {
       thumbnail: "",
     },
     // bestVideo: as any,
+    error: false,
     processingStatus: false,
   };
 
   handleSubmit = (urlPassed: string) => {
-    this.setState({ videos: [], processingStatus: true });
+    this.setState({ error: false, videos: [], processingStatus: true });
     axios.post(API_URL, { 'url': urlPassed }).then((res) => {
+
       this.setState({ videos: res });
       const highestResObj = res.data.reduce((prev: any, curr: any) => {
         return parseInt(prev.res, 10) > parseInt(curr.res, 10) ? prev : curr;
       });
       this.setState({ bestVideo: highestResObj });
       console.log(this.state.bestVideo);
-    });
+    })
+      .catch((err) => {
+        this.setState({ error: true })
+      });
+
     this.setState({ processingStatus: false });
   }
+
+  somethingWentWrong =
+    <div className="container w-50">
+      <div className="justify-content-center align-items-center">
+        <div className="alert alert-danger mt-3 rounded " role="alert">Something went wrong. Please try again, check to make sure the URL is valid.</div>
+      </div>
+    </div>
+
+
 
   render() {
     return (
@@ -42,9 +57,9 @@ class App extends Component {
       <div className="App">
         <Header />
         <hr />
-        <div className="text-center w-100">
+        <div className="container w-100">
           <Form handleSubmit={this.handleSubmit} buttonText={(this.state.processingStatus) ? "Processing..." : "Convert"} />
-          {/* {(this.state.videos.length !== 0) ? <DisplayVideos vid={this.state.bestVideo} /> : <div></div>} */}
+          {(this.state.error) ? this.somethingWentWrong : <div></div>}
           <p className="mt-3 ">
             To save bandwidth on our side and increase download speeds for our users, the download is routed through Google's server.
           </p>
@@ -57,7 +72,7 @@ class App extends Component {
         <div className="container mb-2 mt-3 justify-content-center">
           <div className="row justify-content-center">
             <div className="col-md-auto">
-              <InfoCard className="col" img="https://vignette2.wikia.nocookie.net/joke-battles/images/9/98/Lightning-mcqueen.jpg/revision/latest?cb=20170609142225" title="We're Fast!" text="We're fast. Like really fast. Using Google's servers saves us bandwidth and increases your download speed." />
+              <InfoCard className="col" img="http://thecontextofthings.com/wp-content/uploads/2015/10/leopardo-corre-1280x800.jpg" title="We're Fast!" text="We're fast. Like really fast. Using Google's servers saves us bandwidth and increases your download speed." />
             </div>
             <div className="col-md-auto">
               <InfoCard className="col" img="https://raw.githubusercontent.com/yt-dlp/yt-dlp/master/.github/banner.svg" title={<a href="https://github.com/yt-dlp/yt-dlp" >YT-DLP</a>} text={"We use the YT-DLP api to generate the videos. If possible, we reccomend you use their command line utility as it will offer a better and more robust experience."} />
